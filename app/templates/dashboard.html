@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title }} - CodeGuardian AI</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <!-- Navigation -->
+    <nav class="bg-white shadow-sm border-b">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0">
+                        <h1 class="text-xl font-bold text-blue-600">
+                            <i class="fas fa-shield-alt mr-2"></i>
+                            CodeGuardian AI
+                        </h1>
+                    </div>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <span class="text-sm text-gray-500">v1.0.0</span>
+                    <a href="/api/docs" class="text-blue-600 hover:text-blue-800">
+                        <i class="fas fa-book mr-1"></i>API Docs
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
+        <!-- Welcome Section -->
+        <div class="bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg p-8 text-white mb-8">
+            <h2 class="text-3xl font-bold mb-4">Welcome to CodeGuardian AI</h2>
+            <p class="text-xl opacity-90 mb-6">
+                Intelligent PR Review Agent with Multi-Platform Security & Quality Analysis
+            </p>
+            <div class="flex flex-wrap gap-4">
+                <div class="bg-white bg-opacity-20 rounded-lg p-4 text-center min-w-[120px]">
+                    <div class="text-2xl font-bold">Multi-Platform</div>
+                    <div class="text-sm opacity-75">GitHub & GitLab</div>
+                </div>
+                <div class="bg-white bg-opacity-20 rounded-lg p-4 text-center min-w-[120px]">
+                    <div class="text-2xl font-bold">AI-Powered</div>
+                    <div class="text-sm opacity-75">Smart Analysis</div>
+                </div>
+                <div class="bg-white bg-opacity-20 rounded-lg p-4 text-center min-w-[120px]">
+                    <div class="text-2xl font-bold">Security First</div>
+                    <div class="text-sm opacity-75">Vulnerability Detection</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Start -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+            <!-- Analyze PR Card -->
+            <div class="bg-white rounded-lg shadow-sm border p-6">
+                <h3 class="text-lg font-semibold mb-4">
+                    <i class="fas fa-search text-blue-600 mr-2"></i>
+                    Analyze Pull Request
+                </h3>
+                <p class="text-gray-600 mb-4">
+                    Analyze a specific pull request for code quality, security vulnerabilities, and get AI-powered suggestions.
+                </p>
+                
+                <div x-data="{ platform: 'github', owner: '', repo: '', prNumber: '' }">
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Platform</label>
+                            <select x-model="platform" class="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                <option value="github">GitHub</option>
+                                <option value="gitlab">GitLab</option>
+                            </select>
+                        </div>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Owner</label>
+                                <input x-model="owner" type="text" placeholder="owner" class="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Repository</label>
+                                <input x-model="repo" type="text" placeholder="repository" class="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">PR Number</label>
+                            <input x-model="prNumber" type="number" placeholder="123" class="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        </div>
+                        <button 
+                            @click="window.location.href = `/pr/${platform}/${owner}/${repo}/${prNumber}`"
+                            :disabled="!owner || !repo || !prNumber"
+                            :class="(!owner || !repo || !prNumber) ? 'bg-gray-300 cursor-not-allowed' : 'bg-blue-600 hover:bg-blue-700'"
+                            class="w-full text-white font-medium py-2 px-4 rounded-md transition duration-200"
+                        >
+                            <i class="fas fa-rocket mr-2"></i>
+                            Analyze PR
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Features Card -->
+            <div class="bg-white rounded-lg shadow-sm border p-6">
+                <h3 class="text-lg font-semibold mb-4">
+                    <i class="fas fa-star text-yellow-600 mr-2"></i>
+                    Key Features
+                </h3>
+                <div class="space-y-3">
+                    <div class="flex items-center">
+                        <i class="fas fa-code text-green-600 mr-3"></i>
+                        <span>Code Quality Analysis & Complexity Metrics</span>
+                    </div>
+                    <div class="flex items-center">
+                        <i class="fas fa-shield-alt text-red-600 mr-3"></i>
+                        <span>Security Vulnerability Detection</span>
+                    </div>
+                    <div class="flex items-center">
+                        <i class="fas fa-brain text-purple-600 mr-3"></i>
+                        <span>AI-Powered Code Review Suggestions</span>
+                    </div>
+                    <div class="flex items-center">
+                        <i class="fas fa-git-alt text-blue-600 mr-3"></i>
+                        <span>Multi-Platform Support (GitHub/GitLab)</span>
+                    </div>
+                    <div class="flex items-center">
+                        <i class="fas fa-comments text-indigo-600 mr-3"></i>
+                        <span>Automated Review Comments</span>
+                    </div>
+                    <div class="flex items-center">
+                        <i class="fas fa-chart-line text-teal-600 mr-3"></i>
+                        <span>Comprehensive Analytics & Reporting</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- API Examples -->
+        <div class="bg-white rounded-lg shadow-sm border p-6 mb-8">
+            <h3 class="text-lg font-semibold mb-4">
+                <i class="fas fa-code text-gray-600 mr-2"></i>
+                API Examples
+            </h3>
+            <div class="space-y-4">
+                <div>
+                    <h4 class="font-medium text-gray-700 mb-2">Analyze a Pull Request</h4>
+                    <div class="bg-gray-100 rounded-md p-3 font-mono text-sm">
+                        curl -X POST "/api/analyze/github/owner/repo/123?post_comment=true"
+                    </div>
+                </div>
+                <div>
+                    <h4 class="font-medium text-gray-700 mb-2">Bulk Analyze Repository</h4>
+                    <div class="bg-gray-100 rounded-md p-3 font-mono text-sm">
+                        curl -X POST "/api/bulk-analyze/github/owner/repo"
+                    </div>
+                </div>
+                <div>
+                    <h4 class="font-medium text-gray-700 mb-2">Get Repository Info</h4>
+                    <div class="bg-gray-100 rounded-md p-3 font-mono text-sm">
+                        curl -X GET "/api/repository/github/owner/repo/info"
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Status Section -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <!-- System Health -->
+            <div class="bg-white rounded-lg shadow-sm border p-6">
+                <h3 class="text-lg font-semibold mb-4">
+                    <i class="fas fa-heartbeat text-green-600 mr-2"></i>
+                    System Health
+                </h3>
+                <div id="health-status" class="space-y-2">
+                    <div class="flex items-center justify-between">
+                        <span>Overall Status</span>
+                        <span class="text-green-600">
+                            <i class="fas fa-check-circle"></i> Healthy
+                        </span>
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <span>GitHub API</span>
+                        <span class="text-gray-500">
+                            <i class="fas fa-spinner fa-spin"></i> Checking...
+                        </span>
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <span>GitLab API</span>
+                        <span class="text-gray-500">
+                            <i class="fas fa-spinner fa-spin"></i> Checking...
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Links -->
+            <div class="bg-white rounded-lg shadow-sm border p-6">
+                <h3 class="text-lg font-semibold mb-4">
+                    <i class="fas fa-link text-blue-600 mr-2"></i>
+                    Quick Links
+                </h3>
+                <div class="space-y-2">
+                    <a href="/api/docs" class="block text-blue-600 hover:text-blue-800">
+                        <i class="fas fa-book mr-2"></i>API Documentation
+                    </a>
+                    <a href="/api/health" class="block text-blue-600 hover:text-blue-800">
+                        <i class="fas fa-heartbeat mr-2"></i>Health Check
+                    </a>
+                    <a href="/api/supported-platforms" class="block text-blue-600 hover:text-blue-800">
+                        <i class="fas fa-server mr-2"></i>Supported Platforms
+                    </a>
+                    <a href="https://github.com" class="block text-blue-600 hover:text-blue-800" target="_blank">
+                        <i class="fab fa-github mr-2"></i>GitHub
+                    </a>
+                    <a href="https://gitlab.com" class="block text-blue-600 hover:text-blue-800" target="_blank">
+                        <i class="fab fa-gitlab mr-2"></i>GitLab
+                    </a>
+                </div>
+            </div>
+
+            <!-- About -->
+            <div class="bg-white rounded-lg shadow-sm border p-6">
+                <h3 class="text-lg font-semibold mb-4">
+                    <i class="fas fa-info-circle text-purple-600 mr-2"></i>
+                    About
+                </h3>
+                <div class="space-y-2 text-sm text-gray-600">
+                    <div>
+                        <strong>Version:</strong> 1.0.0
+                    </div>
+                    <div>
+                        <strong>Built for:</strong> CodeMate Hackathon
+                    </div>
+                    <div>
+                        <strong>Features:</strong> AI Code Review, Security Scanning, Multi-Platform Support
+                    </div>
+                    <div class="pt-2">
+                        <span class="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded-full">
+                            Production Ready
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t mt-12 py-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-gray-600">
+            <p>&copy; 2024 CodeGuardian AI - Intelligent PR Review Agent</p>
+            <p class="mt-2">Built with FastAPI, Python, and AI for the CodeMate Hackathon</p>
+        </div>
+    </footer>
+
+    <script>
+        // Load health status
+        async function loadHealthStatus() {
+            try {
+                const response = await fetch('/api/health');
+                const data = await response.json();
+                
+                const statusElement = document.getElementById('health-status');
+                const githubStatus = data.services.github ? 
+                    '<span class="text-green-600"><i class="fas fa-check-circle"></i> Connected</span>' :
+                    '<span class="text-red-600"><i class="fas fa-times-circle"></i> Disconnected</span>';
+                    
+                const gitlabStatus = data.services.gitlab ? 
+                    '<span class="text-green-600"><i class="fas fa-check-circle"></i> Connected</span>' :
+                    '<span class="text-red-600"><i class="fas fa-times-circle"></i> Disconnected</span>';
+                
+                statusElement.innerHTML = `
+                    <div class="flex items-center justify-between">
+                        <span>Overall Status</span>
+                        <span class="text-${data.status === 'healthy' ? 'green' : 'red'}-600">
+                            <i class="fas fa-${data.status === 'healthy' ? 'check' : 'times'}-circle"></i> ${data.status}
+                        </span>
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <span>GitHub API</span>
+                        ${githubStatus}
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <span>GitLab API</span>
+                        ${gitlabStatus}
+                    </div>
+                `;
+            } catch (error) {
+                console.error('Failed to load health status:', error);
+            }
+        }
+        
+        // Load health status on page load
+        document.addEventListener('DOMContentLoaded', loadHealthStatus);
+    </script>
+</body>
+</html>

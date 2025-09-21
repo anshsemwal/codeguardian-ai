@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title }} - CodeGuardian AI</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/github.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
+    <script>hljs.highlightAll();</script>
+</head>
+<body class="bg-gray-50">
+    <div class="min-h-screen">
+        <!-- Header -->
+        <header class="bg-white shadow-sm">
+            <div class="max-w-7xl mx-auto px-4 py-4 sm:px-6 lg:px-8 flex justify-between items-center">
+                <h1 class="text-2xl font-bold text-gray-900">CodeGuardian AI</h1>
+                <nav>
+                    <a href="/" class="text-gray-600 hover:text-gray-900 px-3 py-2">Dashboard</a>
+                </nav>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="max-w-7xl mx-auto px-4 py-8 sm:px-6 lg:px-8">
+            <!-- PR Header -->
+            <div class="bg-white shadow overflow-hidden sm:rounded-lg mb-8">
+                <div class="px-4 py-5 sm:px-6">
+                    <h2 class="text-lg leading-6 font-medium text-gray-900" id="pr-title">
+                        PR #{{ pr.number }}: {{ pr.title or 'No title' }}
+                    </h2>
+                    <p class="mt-1 max-w-2xl text-sm text-gray-500">
+                        Opened by {{ pr.author or 'Unknown' }} 
+                        {% if pr.created_at %}on {{ pr.created_at|datetime }}{% endif %}
+                    </p>
+                </div>
+                <div class="border-t border-gray-200 px-4 py-5 sm:p-0">
+                    <dl class="sm:divide-y sm:divide-gray-200">
+                        <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                            <dt class="text-sm font-medium text-gray-500">Status</dt>
+                            <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
+                                    {% if pr.state == 'open' %}bg-green-100 text-green-800
+                                    {% elif pr.state == 'closed' %}bg-red-100 text-red-800
+                                    {% else %}bg-gray-100 text-gray-800{% endif %}">
+                                    {{ pr.state|default('unknown')|title }}
+                                </span>
+                            </dd>
+                        </div>
+                        <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                            <dt class="text-sm font-medium text-gray-500">Branch</dt>
+                            <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                                <span class="font-mono">{{ pr.head_branch or 'unknown' }} → {{ pr.base_branch or 'unknown' }}</span>
+                            </dd>
+                        </div>
+                        <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                            <dt class="text-sm font-medium text-gray-500">Changes</dt>
+                            <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                                <span class="text-green-600">+{{ pr.additions|default(0) }}</span>
+                                <span class="text-red-600">-{{ pr.deletions|default(0) }}</span>
+                                <span class="text-gray-500">({{ pr.changed_files|default(0) }} files)</span>
+                            </dd>
+                        </div>
+                    </dl>
+                </div>
+            </div>
+
+            <!-- PR Description -->
+            {% if pr.description %}
+            <div class="bg-white shadow overflow-hidden sm:rounded-lg mb-8">
+                <div class="px-4 py-5 sm:px-6">
+                    <h3 class="text-lg leading-6 font-medium text-gray-900">Description</h3>
+                </div>
+                <div class="px-4 py-5 sm:p-6 border-t border-gray-200">
+                    <div class="prose max-w-none">
+                        {{ pr.description|markdown|safe }}
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- Files Changed -->
+            <div class="bg-white shadow overflow-hidden sm:rounded-lg">
+                <div class="px-4 py-5 sm:px-6">
+                    <h3 class="text-lg leading-6 font-medium text-gray-900">Files Changed ({{ pr.files|length }})</h3>
+                </div>
+                <div class="border-t border-gray-200">
+                    {% for file in pr.files %}
+                    <div class="border-b border-gray-200">
+                        <div class="px-4 py-3 bg-gray-50 flex justify-between items-center">
+                            <div>
+                                <span class="text-sm font-mono">{{ file.filename }}</span>
+                                <span class="ml-2 px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
+                                    {% if file.status == 'added' %}bg-green-100 text-green-800
+                                    {% elif file.status == 'removed' %}bg-red-100 text-red-800
+                                    {% elif file.status == 'modified' %}bg-blue-100 text-blue-800
+                                    {% else %}bg-gray-100 text-gray-800{% endif %}">
+                                    {{ file.status|default('modified')|title }}
+                                </span>
+                            </div>
+                            <div class="text-sm text-gray-500">
+                                <span class="text-green-600">+{{ file.additions|default(0) }}</span>
+                                <span class="text-red-600">-{{ file.deletions|default(0) }}</span>
+                            </div>
+                        </div>
+                        {% if file.patch %}
+                        <div class="p-4 overflow-x-auto">
+                            <pre><code class="language-diff">{{ file.patch }}</code></pre>
+                        </div>
+                        {% endif %}
+                    </div>
+                    {% else %}
+                    <div class="px-4 py-8 text-center text-gray-500">
+                        No files changed in this PR
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </main>
+
+        <!-- Footer -->
+        <footer class="bg-white border-t border-gray-200 mt-12">
+            <div class="max-w-7xl mx-auto py-6 px-4 overflow-hidden sm:px-6 lg:px-8">
+                <p class="text-center text-base text-gray-500">
+                    &copy; 2025 CodeGuardian AI. All rights reserved.
+                </p>
+            </div>
+        </footer>
+    </div>
+</body>
+</html>

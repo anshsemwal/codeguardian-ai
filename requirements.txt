@@ -1,0 +1,9 @@
+fastapi
+uvicorn[standard]
+python-multipart
+requests
+PyGithub
+python-gitlab
+bandit
+python-dotenv
+Jinja2
