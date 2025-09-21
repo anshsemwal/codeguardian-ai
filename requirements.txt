@@ -7,3 +7,4 @@ python-gitlab
 bandit
 python-dotenv
 Jinja2
+markdown
